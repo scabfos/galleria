@@ -52,6 +52,7 @@ var doc    = window.document,
         };
     },
     IFRAME = window.parent !== window.self,
+    youtube_api = '',
 
     // list of Galleria events
     _eventlist = 'data ready thumbnail loadstart loadfinish image play pause progress ' +
@@ -120,16 +121,13 @@ var doc    = window.document,
                 return 'http://www.youtube.com/embed/' + this.id;
             },
             getUrl: function() {
-                return 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + this.id + '&key=AIzaSyAdlWPAA8I8WRwy4xBi8Hh8fVMfgXx8LWY';
+                return 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + this.id + '&key=' + youtube_api;
             },
             get_thumb: function(data) {
                 return PROT + '//img.youtube.com/vi/'+ this.id + '/default.jpg';
             },
             get_image: function(data) {
-                if ( data.entry.yt$hd ) {
-                    return PROT + '//img.youtube.com/vi/'+this.id+'/maxresdefault.jpg';
-                }
-                return data.entry.media$group.media$thumbnail[3].url;
+                return PROT + '//img.youtube.com/vi/'+ this.id + '/0.jpg';
             }
         },
         vimeo: {
@@ -2666,7 +2664,8 @@ Galleria.prototype = {
                 hd: 1,
                 rel: 0,
                 showinfo: 0
-            }
+            },
+            youtube_api : ''
         };
 
         // legacy support for transitionInitial
@@ -2751,6 +2750,9 @@ Galleria.prototype = {
 
         // merge the theme & caller options
         $.extend( true, options, this.theme.defaults, this._original.options, Galleria.configure.options );
+
+        youtube_api = options.youtube_api;
+        console.log(youtube_api);
 
         // internally we use boolean for swipe
         options.swipe = (function(s) {
