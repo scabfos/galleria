@@ -120,10 +120,10 @@ var doc    = window.document,
                 return 'http://www.youtube.com/embed/' + this.id;
             },
             getUrl: function() {
-                return PROT + '//gdata.youtube.com/feeds/api/videos/' + this.id + '?v=2&alt=json-in-script&callback=?';
+                return 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + this.id + '&key=AIzaSyAdlWPAA8I8WRwy4xBi8Hh8fVMfgXx8LWY';
             },
             get_thumb: function(data) {
-                return data.entry.media$group.media$thumbnail[2].url;
+                return PROT + '//img.youtube.com/vi/'+ this.id + '/default.jpg';
             },
             get_image: function(data) {
                 if ( data.entry.yt$hd ) {
@@ -193,6 +193,7 @@ var doc    = window.document,
         this.getMedia = function( type, callback, fail ) {
             fail = fail || F;
             var self = this;
+
             var success = function( data ) {
                 callback( self['get_'+type]( data ) );
             };
@@ -1088,7 +1089,7 @@ $.event.special['click:fast'] = {
         }).on('touchstart.fast', function(e) {
             window.clearTimeout($(this).data('timer'));
             $(this).data('clickstate', {
-                touched: true, 
+                touched: true,
                 touchdown: true,
                 coords: getCoords(e.originalEvent),
                 evObj: e
@@ -1096,9 +1097,9 @@ $.event.special['click:fast'] = {
         }).on('touchmove.fast', function(e) {
             var coords = getCoords(e.originalEvent),
                 state = $(this).data('clickstate'),
-                distance = Math.max( 
-                    Math.abs(state.coords.x - coords.x), 
-                    Math.abs(state.coords.y - coords.y) 
+                distance = Math.max(
+                    Math.abs(state.coords.x - coords.x),
+                    Math.abs(state.coords.y - coords.y)
                 );
             if ( distance > 6 ) {
                 $(this).data('clickstate', $.extend(state, {
@@ -2758,7 +2759,7 @@ Galleria.prototype = {
 
             // legacy patch
             if( s === false || s == 'disabled' ) { return false; }
-            
+
             return !!Galleria.TOUCH;
 
         }( options.swipe ));
